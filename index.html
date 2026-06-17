@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Position Size Calculator</title>
+
+<style>
+
+body{
+background:#0f172a;
+font-family:Arial,sans-serif;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+color:white;
+}
+
+.card{
+
+background:#1e293b;
+padding:30px;
+border-radius:20px;
+width:420px;
+
+}
+
+h1{
+
+text-align:center;
+margin-bottom:25px;
+
+}
+
+label{
+
+display:block;
+margin-top:15px;
+margin-bottom:5px;
+
+}
+
+input{
+
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+background:#334155;
+color:white;
+font-size:18px;
+
+}
+
+button{
+
+width:100%;
+margin-top:25px;
+padding:15px;
+font-size:20px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+
+}
+
+.result{
+
+margin-top:25px;
+background:#334155;
+padding:20px;
+border-radius:12px;
+font-size:22px;
+
+}
+
+.small{
+
+font-size:18px;
+margin-top:10px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>Калькулятор позиции</h1>
+
+<label>Баланс ($)</label>
+<input id="balance" value="1000">
+
+<label>Риск (%)</label>
+<input id="risk" value="1">
+
+<label>Цена входа</label>
+<input id="entry" value="1.4000">
+
+<label>Стоп-лосс</label>
+<input id="stop" value="1.3980">
+
+<label>Размер контракта</label>
+<input id="contract" value="100000">
+
+<button onclick="calc()">Рассчитать</button>
+
+<div class="result">
+
+<div id="riskMoney"></div>
+
+<div class="small" id="stopDistance"></div>
+
+<div class="small" id="lots"></div>
+
+<div class="small" id="units"></div>
+
+</div>
+
+</div>
+
+<script>
+
+function calc(){
+
+let balance = parseFloat(document.getElementById("balance").value);
+
+let risk = parseFloat(document.getElementById("risk").value);
+
+let entry = parseFloat(document.getElementById("entry").value);
+
+let stop = parseFloat(document.getElementById("stop").value);
+
+let contract = parseFloat(document.getElementById("contract").value);
+
+let riskMoney = balance * risk / 100;
+
+let stopDistance = Math.abs(entry-stop);
+
+let units = riskMoney/stopDistance;
+
+let lots = units/contract;
+
+document.getElementById("riskMoney").innerHTML=
+"Риск: $" + riskMoney.toFixed(2);
+
+document.getElementById("stopDistance").innerHTML=
+"Дистанция стопа: " + stopDistance.toFixed(5);
+
+document.getElementById("lots").innerHTML=
+"Лоты: " + lots.toFixed(3);
+
+document.getElementById("units").innerHTML=
+"Объем: " + units.toFixed(0);
+
+}
+
+calc();
+
+</script>
+
+</body>
+
+</html>
