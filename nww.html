@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>News Trading Calculator</title>
+
+<style>
+
+body{
+background:#0f172a;
+font-family:Arial,sans-serif;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+color:white;
+}
+
+.card{
+background:#1e293b;
+padding:30px;
+border-radius:20px;
+width:420px;
+}
+
+h1{
+text-align:center;
+margin-bottom:25px;
+}
+
+label{
+display:block;
+margin-top:15px;
+margin-bottom:6px;
+}
+
+input{
+
+width:100%;
+padding:12px;
+font-size:20px;
+
+border:none;
+border-radius:10px;
+
+background:#334155;
+
+color:white;
+
+box-sizing:border-box;
+
+}
+
+button{
+
+width:100%;
+
+padding:15px;
+
+margin-top:25px;
+
+font-size:20px;
+
+border:none;
+
+border-radius:12px;
+
+cursor:pointer;
+
+background:#22c55e;
+
+color:white;
+
+}
+
+.result{
+
+margin-top:25px;
+
+background:#334155;
+
+padding:20px;
+
+border-radius:12px;
+
+}
+
+.block{
+
+margin-top:20px;
+
+}
+
+.line{
+
+margin-top:8px;
+
+font-size:20px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>News Calculator</h1>
+
+<label>Current Price</label>
+
+<input id="price" value="1.36550">
+
+<label>Order Distance (points)</label>
+
+<input id="distance" value="150">
+
+<label>Take Profit (points)</label>
+
+<input id="tp" value="100">
+
+<label>Stop Loss (points)</label>
+
+<input id="sl" value="100">
+
+<button onclick="calc()">
+
+Calculate
+
+</button>
+
+<div class="result">
+
+<div class="block">
+
+<b>BUY STOP</b>
+
+<div class="line" id="buyEntry"></div>
+
+<div class="line" id="buyTP"></div>
+
+<div class="line" id="buySL"></div>
+
+</div>
+
+
+<div class="block">
+
+<b>SELL STOP</b>
+
+<div class="line" id="sellEntry"></div>
+
+<div class="line" id="sellTP"></div>
+
+<div class="line" id="sellSL"></div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+function calc(){
+
+let price=
+
+parseFloat(
+
+document.getElementById("price").value);
+
+let distance=
+
+parseFloat(
+
+document.getElementById("distance").value);
+
+let tp=
+
+parseFloat(
+
+document.getElementById("tp").value);
+
+let sl=
+
+parseFloat(
+
+document.getElementById("sl").value);
+
+
+let point=0.00001;
+
+
+let buyEntry=
+
+price+
+
+distance*point;
+
+let buyTP=
+
+buyEntry+
+
+tp*point;
+
+let buySL=
+
+buyEntry-
+
+sl*point;
+
+
+let sellEntry=
+
+price-
+
+distance*point;
+
+let sellTP=
+
+sellEntry-
+
+tp*point;
+
+let sellSL=
+
+sellEntry+
+
+sl*point;
+
+
+document.getElementById("buyEntry").innerHTML=
+
+"Entry: "+buyEntry.toFixed(5);
+
+document.getElementById("buyTP").innerHTML=
+
+"TP: "+buyTP.toFixed(5);
+
+document.getElementById("buySL").innerHTML=
+
+"SL: "+buySL.toFixed(5);
+
+
+document.getElementById("sellEntry").innerHTML=
+
+"Entry: "+sellEntry.toFixed(5);
+
+document.getElementById("sellTP").innerHTML=
+
+"TP: "+sellTP.toFixed(5);
+
+document.getElementById("sellSL").innerHTML=
+
+"SL: "+sellSL.toFixed(5);
+
+}
+
+calc();
+
+</script>
+
+</body>
+
+</html>
