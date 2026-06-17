@@ -1,52 +1,35 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
 <meta charset="UTF-8">
-
-<title>Position Size Calculator</title>
+<title>MT5 Position Calculator</title>
 
 <style>
 
 body{
 
 background:#0f172a;
-
 font-family:Arial,sans-serif;
-
 display:flex;
-
 justify-content:center;
-
 align-items:center;
-
 min-height:100vh;
-
 color:white;
-
-padding:20px;
 
 }
 
 .card{
 
 background:#1e293b;
-
 padding:30px;
-
 border-radius:20px;
-
 width:430px;
-
-box-shadow:0 0 30px rgba(0,0,0,0.3);
 
 }
 
 h1{
 
 text-align:center;
-
 margin-bottom:25px;
 
 }
@@ -54,31 +37,20 @@ margin-bottom:25px;
 label{
 
 display:block;
-
 margin-top:15px;
-
 margin-bottom:6px;
-
-font-size:15px;
 
 }
 
 input,select{
 
 width:100%;
-
 padding:12px;
-
 border:none;
-
 border-radius:10px;
-
 background:#334155;
-
 color:white;
-
 font-size:18px;
-
 box-sizing:border-box;
 
 }
@@ -86,39 +58,22 @@ box-sizing:border-box;
 button{
 
 width:100%;
-
-margin-top:25px;
-
 padding:15px;
-
-font-size:20px;
-
+margin-top:25px;
 border:none;
-
 border-radius:12px;
-
+font-size:20px;
 cursor:pointer;
-
 background:#22c55e;
-
 color:white;
-
-}
-
-button:hover{
-
-opacity:0.9;
 
 }
 
 .result{
 
 margin-top:25px;
-
 background:#334155;
-
 padding:20px;
-
 border-radius:12px;
 
 }
@@ -126,7 +81,6 @@ border-radius:12px;
 .row{
 
 margin-top:12px;
-
 font-size:18px;
 
 }
@@ -139,44 +93,31 @@ font-size:18px;
 
 <div class="card">
 
-<h1>Position Calculator</h1>
+<h1>MT5 Position Calculator</h1>
 
 <label>Instrument</label>
 
-<select id="symbol" onchange="updateSymbol()">
+<select id="symbol">
 
 <option>EUR/USD</option>
-
 <option>GBP/USD</option>
-
 <option>USD/JPY</option>
-
 <option>USD/CAD</option>
-
 <option>AUD/USD</option>
-
 <option>NZD/USD</option>
-
 <option>USD/CHF</option>
 
 <option>EUR/GBP</option>
-
 <option>EUR/JPY</option>
-
 <option>EUR/CHF</option>
-
 <option>EUR/CAD</option>
-
 <option>EUR/AUD</option>
 
 <option>GBP/JPY</option>
-
 <option>GBP/CHF</option>
-
 <option>GBP/CAD</option>
 
 <option>AUD/JPY</option>
-
 <option>AUD/CAD</option>
 
 <option>CAD/JPY</option>
@@ -204,17 +145,12 @@ font-size:18px;
 
 <label>Entry Price</label>
 
-<input id="entry" value="">
+<input id="entry">
 
 
 <label>Stop Loss</label>
 
-<input id="stop" value="">
-
-
-<label>Contract Size</label>
-
-<input id="contract" readonly>
+<input id="stop">
 
 
 <button onclick="calc()">
@@ -226,90 +162,81 @@ Calculate
 
 <div class="result">
 
-<div class="row" id="riskMoney"></div>
+<div class="row" id="riskMoney">
 
-<div class="row" id="stopDistance"></div>
-
-<div class="row" id="lots"></div>
-
-<div class="row" id="units"></div>
+Risk:
 
 </div>
 
+<div class="row" id="stopPips">
+
+Stop:
+
+</div>
+
+<div class="row" id="lots">
+
+Lots:
+
+</div>
+
+</div>
 
 </div>
 
 
 <script>
 
-const instruments={
+const data={
 
-"EUR/USD":{contract:100000,pip:0.0001},
+"EUR/USD":0.0001,
 
-"GBP/USD":{contract:100000,pip:0.0001},
+"GBP/USD":0.0001,
 
-"USD/JPY":{contract:100000,pip:0.01},
+"USD/JPY":0.01,
 
-"USD/CAD":{contract:100000,pip:0.0001},
+"USD/CAD":0.0001,
 
-"AUD/USD":{contract:100000,pip:0.0001},
+"AUD/USD":0.0001,
 
-"NZD/USD":{contract:100000,pip:0.0001},
+"NZD/USD":0.0001,
 
-"USD/CHF":{contract:100000,pip:0.0001},
+"USD/CHF":0.0001,
 
-"EUR/GBP":{contract:100000,pip:0.0001},
+"EUR/GBP":0.0001,
 
-"EUR/JPY":{contract:100000,pip:0.01},
+"EUR/JPY":0.01,
 
-"EUR/CHF":{contract:100000,pip:0.0001},
+"EUR/CHF":0.0001,
 
-"EUR/CAD":{contract:100000,pip:0.0001},
+"EUR/CAD":0.0001,
 
-"EUR/AUD":{contract:100000,pip:0.0001},
+"EUR/AUD":0.0001,
 
-"GBP/JPY":{contract:100000,pip:0.01},
+"GBP/JPY":0.01,
 
-"GBP/CHF":{contract:100000,pip:0.0001},
+"GBP/CHF":0.0001,
 
-"GBP/CAD":{contract:100000,pip:0.0001},
+"GBP/CAD":0.0001,
 
-"AUD/JPY":{contract:100000,pip:0.01},
+"AUD/JPY":0.01,
 
-"AUD/CAD":{contract:100000,pip:0.0001},
+"AUD/CAD":0.0001,
 
-"CAD/JPY":{contract:100000,pip:0.01},
+"CAD/JPY":0.01,
 
-"CHF/JPY":{contract:100000,pip:0.01},
+"CHF/JPY":0.01,
 
-"NZD/JPY":{contract:100000,pip:0.01},
+"NZD/JPY":0.01,
 
-"XAU/USD":{contract:100,pip:0.01},
+"XAU/USD":0.01,
 
-"XAG/USD":{contract:5000,pip:0.01}
+"XAG/USD":0.01
 
 };
 
 
-function updateSymbol(){
-
-let s=document.getElementById("symbol").value;
-
-document.getElementById("contract").value=
-
-instruments[s].contract;
-
-}
-
-
 function calc(){
-
-let symbol=document.getElementById("symbol").value;
-
-let contract=instruments[symbol].contract;
-
-let pip=instruments[symbol].pip;
-
 
 let balance=parseFloat(
 
@@ -327,12 +254,26 @@ let stop=parseFloat(
 
 document.getElementById("stop").value);
 
+let symbol=
 
-let riskMoney=balance*risk/100;
+document.getElementById("symbol").value;
 
-let stopDistance=Math.abs(entry-stop);
+let pip=data[symbol];
 
-let pips=stopDistance/pip;
+
+let riskMoney=
+
+balance*risk/100;
+
+
+let stopDistance=
+
+Math.abs(entry-stop);
+
+
+let pips=
+
+stopDistance/pip;
 
 
 let lots;
@@ -340,52 +281,66 @@ let lots;
 
 if(symbol=="XAU/USD"){
 
-lots=riskMoney/(stopDistance*contract);
+lots=
+
+riskMoney/
+
+(stopDistance*100);
 
 }
 
 else if(symbol=="XAG/USD"){
 
-lots=riskMoney/(stopDistance*contract);
+lots=
+
+riskMoney/
+
+(stopDistance*5000);
 
 }
 
 else{
 
-lots=riskMoney/(pips*10);
+lots=
+
+riskMoney/
+
+(pips*10);
 
 }
 
 
-let units=lots*contract;
+document.getElementById("riskMoney")
+
+.innerHTML=
+
+"Risk: $"+
+
+riskMoney.toFixed(2);
 
 
-document.getElementById("riskMoney").innerHTML=
+document.getElementById("stopPips")
 
-"Risk: $" + riskMoney.toFixed(2);
+.innerHTML=
 
+"Stop: "+
 
-document.getElementById("stopDistance").innerHTML=
+pips.toFixed(1)+
 
-"Stop: " + pips.toFixed(1) + " pips";
-
-
-document.getElementById("lots").innerHTML=
-
-"Lots: " + lots.toFixed(2);
+" pips";
 
 
-document.getElementById("units").innerHTML=
+document.getElementById("lots")
 
-"Volume: " + units.toFixed(0);
+.innerHTML=
+
+"Lots: "+
+
+lots.toFixed(2);
 
 }
-
-
-updateSymbol();
 
 </script>
-
 
 </body>
 
