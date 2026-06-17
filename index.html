@@ -1,33 +1,52 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
 <meta charset="UTF-8">
+
 <title>Position Size Calculator</title>
 
 <style>
 
 body{
+
 background:#0f172a;
+
 font-family:Arial,sans-serif;
+
 display:flex;
+
 justify-content:center;
+
 align-items:center;
-height:100vh;
+
+min-height:100vh;
+
 color:white;
+
+padding:20px;
+
 }
 
 .card{
 
 background:#1e293b;
+
 padding:30px;
+
 border-radius:20px;
-width:420px;
+
+width:430px;
+
+box-shadow:0 0 30px rgba(0,0,0,0.3);
 
 }
 
 h1{
 
 text-align:center;
+
 margin-bottom:25px;
 
 }
@@ -35,49 +54,80 @@ margin-bottom:25px;
 label{
 
 display:block;
+
 margin-top:15px;
-margin-bottom:5px;
+
+margin-bottom:6px;
+
+font-size:15px;
 
 }
 
-input{
+input,select{
 
 width:100%;
+
 padding:12px;
+
 border:none;
+
 border-radius:10px;
+
 background:#334155;
+
 color:white;
+
 font-size:18px;
+
+box-sizing:border-box;
 
 }
 
 button{
 
 width:100%;
+
 margin-top:25px;
+
 padding:15px;
+
 font-size:20px;
+
 border:none;
+
 border-radius:12px;
+
 cursor:pointer;
+
+background:#22c55e;
+
+color:white;
+
+}
+
+button:hover{
+
+opacity:0.9;
 
 }
 
 .result{
 
 margin-top:25px;
+
 background:#334155;
+
 padding:20px;
+
 border-radius:12px;
-font-size:22px;
 
 }
 
-.small{
+.row{
+
+margin-top:12px;
 
 font-size:18px;
-margin-top:10px;
 
 }
 
@@ -89,78 +139,253 @@ margin-top:10px;
 
 <div class="card">
 
-<h1>Калькулятор позиции</h1>
+<h1>Position Calculator</h1>
 
-<label>Баланс ($)</label>
+<label>Instrument</label>
+
+<select id="symbol" onchange="updateSymbol()">
+
+<option>EUR/USD</option>
+
+<option>GBP/USD</option>
+
+<option>USD/JPY</option>
+
+<option>USD/CAD</option>
+
+<option>AUD/USD</option>
+
+<option>NZD/USD</option>
+
+<option>USD/CHF</option>
+
+<option>EUR/GBP</option>
+
+<option>EUR/JPY</option>
+
+<option>EUR/CHF</option>
+
+<option>EUR/CAD</option>
+
+<option>EUR/AUD</option>
+
+<option>GBP/JPY</option>
+
+<option>GBP/CHF</option>
+
+<option>GBP/CAD</option>
+
+<option>AUD/JPY</option>
+
+<option>AUD/CAD</option>
+
+<option>CAD/JPY</option>
+
+<option>CHF/JPY</option>
+
+<option>NZD/JPY</option>
+
+<option>XAU/USD</option>
+
+<option>XAG/USD</option>
+
+</select>
+
+
+<label>Balance ($)</label>
+
 <input id="balance" value="1000">
 
-<label>Риск (%)</label>
+
+<label>Risk (%)</label>
+
 <input id="risk" value="1">
 
-<label>Цена входа</label>
-<input id="entry" value="1.4000">
 
-<label>Стоп-лосс</label>
-<input id="stop" value="1.3980">
+<label>Entry Price</label>
 
-<label>Размер контракта</label>
-<input id="contract" value="100000">
+<input id="entry" value="">
 
-<button onclick="calc()">Рассчитать</button>
+
+<label>Stop Loss</label>
+
+<input id="stop" value="">
+
+
+<label>Contract Size</label>
+
+<input id="contract" readonly>
+
+
+<button onclick="calc()">
+
+Calculate
+
+</button>
+
 
 <div class="result">
 
-<div id="riskMoney"></div>
+<div class="row" id="riskMoney"></div>
 
-<div class="small" id="stopDistance"></div>
+<div class="row" id="stopDistance"></div>
 
-<div class="small" id="lots"></div>
+<div class="row" id="lots"></div>
 
-<div class="small" id="units"></div>
+<div class="row" id="units"></div>
+
+</div>
+
 
 </div>
 
-</div>
 
 <script>
 
-function calc(){
+const instruments={
 
-let balance = parseFloat(document.getElementById("balance").value);
+"EUR/USD":{contract:100000,pip:0.0001},
 
-let risk = parseFloat(document.getElementById("risk").value);
+"GBP/USD":{contract:100000,pip:0.0001},
 
-let entry = parseFloat(document.getElementById("entry").value);
+"USD/JPY":{contract:100000,pip:0.01},
 
-let stop = parseFloat(document.getElementById("stop").value);
+"USD/CAD":{contract:100000,pip:0.0001},
 
-let contract = parseFloat(document.getElementById("contract").value);
+"AUD/USD":{contract:100000,pip:0.0001},
 
-let riskMoney = balance * risk / 100;
+"NZD/USD":{contract:100000,pip:0.0001},
 
-let stopDistance = Math.abs(entry-stop);
+"USD/CHF":{contract:100000,pip:0.0001},
 
-let units = riskMoney/stopDistance;
+"EUR/GBP":{contract:100000,pip:0.0001},
 
-let lots = units/contract;
+"EUR/JPY":{contract:100000,pip:0.01},
 
-document.getElementById("riskMoney").innerHTML=
-"Риск: $" + riskMoney.toFixed(2);
+"EUR/CHF":{contract:100000,pip:0.0001},
 
-document.getElementById("stopDistance").innerHTML=
-"Дистанция стопа: " + stopDistance.toFixed(5);
+"EUR/CAD":{contract:100000,pip:0.0001},
 
-document.getElementById("lots").innerHTML=
-"Лоты: " + lots.toFixed(3);
+"EUR/AUD":{contract:100000,pip:0.0001},
 
-document.getElementById("units").innerHTML=
-"Объем: " + units.toFixed(0);
+"GBP/JPY":{contract:100000,pip:0.01},
+
+"GBP/CHF":{contract:100000,pip:0.0001},
+
+"GBP/CAD":{contract:100000,pip:0.0001},
+
+"AUD/JPY":{contract:100000,pip:0.01},
+
+"AUD/CAD":{contract:100000,pip:0.0001},
+
+"CAD/JPY":{contract:100000,pip:0.01},
+
+"CHF/JPY":{contract:100000,pip:0.01},
+
+"NZD/JPY":{contract:100000,pip:0.01},
+
+"XAU/USD":{contract:100,pip:0.01},
+
+"XAG/USD":{contract:5000,pip:0.01}
+
+};
+
+
+function updateSymbol(){
+
+let s=document.getElementById("symbol").value;
+
+document.getElementById("contract").value=
+
+instruments[s].contract;
 
 }
 
-calc();
+
+function calc(){
+
+let symbol=document.getElementById("symbol").value;
+
+let contract=instruments[symbol].contract;
+
+let pip=instruments[symbol].pip;
+
+
+let balance=parseFloat(
+
+document.getElementById("balance").value);
+
+let risk=parseFloat(
+
+document.getElementById("risk").value);
+
+let entry=parseFloat(
+
+document.getElementById("entry").value);
+
+let stop=parseFloat(
+
+document.getElementById("stop").value);
+
+
+let riskMoney=balance*risk/100;
+
+let stopDistance=Math.abs(entry-stop);
+
+let pips=stopDistance/pip;
+
+
+let lots;
+
+
+if(symbol=="XAU/USD"){
+
+lots=riskMoney/(stopDistance*contract);
+
+}
+
+else if(symbol=="XAG/USD"){
+
+lots=riskMoney/(stopDistance*contract);
+
+}
+
+else{
+
+lots=riskMoney/(pips*10);
+
+}
+
+
+let units=lots*contract;
+
+
+document.getElementById("riskMoney").innerHTML=
+
+"Risk: $" + riskMoney.toFixed(2);
+
+
+document.getElementById("stopDistance").innerHTML=
+
+"Stop: " + pips.toFixed(1) + " pips";
+
+
+document.getElementById("lots").innerHTML=
+
+"Lots: " + lots.toFixed(2);
+
+
+document.getElementById("units").innerHTML=
+
+"Volume: " + units.toFixed(0);
+
+}
+
+
+updateSymbol();
 
 </script>
+
 
 </body>
 
